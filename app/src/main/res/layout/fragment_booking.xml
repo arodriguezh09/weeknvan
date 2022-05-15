@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".main.BookingFragment">
+
+    <TextView
+        android:id="@+id/tvBookingBrand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="15dp"
+        android:text="Marca: " />
+
+    <TextView
+        android:id="@+id/tvBookingModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="15dp"
+        android:text="Modelo: " />
+
+    <TextView
+        android:id="@+id/tvBookingYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="15dp"
+        android:text="Año: " />
+
+    <TextView
+        android:id="@+id/tvBookingPlate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="15dp"
+        android:text="Matrícula: " />
+
+    <TextView
+        android:id="@+id/tvBookingOwner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="15dp"
+        android:text="Dueño: " />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilBookingDate"
+        android:layout_width="300dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="10dp"
+        android:hint="Fecha de reserva"
+        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etBookingDate"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvBookingTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:textSize="20dp"
+        android:text="Total: " />
+
+    <Button
+        android:id="@+id/bBookingValidate"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Confirmar reserva"/>
+
+</LinearLayout>

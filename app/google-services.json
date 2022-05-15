@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "106992632831",
+    "firebase_url": "https://weeknvan-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "weeknvan",
+    "storage_bucket": "weeknvan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:106992632831:android:0dac661ebb8d6440d91dca",
+        "android_client_info": {
+          "package_name": "arh.miapp.camperbooking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "106992632831-ft4de7td3u738k50u8a5t7u7sdksklh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxRld5lLlc5BgdgBelWDCYAahiDfQxO34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "106992632831-ft4de7td3u738k50u8a5t7u7sdksklh4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

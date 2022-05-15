@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_to">" al "</string>
+    <string name="year">Año</string>
+    <string name="search">Buscando</string>
+    <string name="success_user_details">Cambios realizados correctamente</string>
+    <string name="required">Campo obligatorio</string>
+    <string name="fuel">Combustible</string>
+    <string name="error_login">Credenciales incorrectas</string>
+    <string name="error_no_checkinout">Debes introducir las fechas de reserva</string>
+    <string name="search_from">" del "</string>
+    <string name="details">Detalles del vehículo</string>
+    <string name="day">día</string>
+    <string name="edit">Editar</string>
+    <string name="search_city">" en "</string>
+    <string name="try_later">Error, inténtelo más tarde</string>
+    <string name="error_loading_images">Fallo al cargar imagen</string>
+    <string name="error_loading_booking">Fallo al cargar reservas</string>
+    <string name="error_loading_users">Fallo al cargar usuarios</string>
+    <string name="error_loading_vehicles">Fallo al cargar vehículos</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="error_date_disp">La fecha no está disponible</string>
+    <string name="error_mail">Mail inválido</string>
+    <string name="brand">Marca</string>
+    <string name="plate">Matrícula</string>
+    <string name="model">Modelo</string>
+    <string name="error_pass_match">No coincide</string>
+    <string name="owner">Nombre del dueño</string>
+    <string name="error_pass">Pass inválida</string>
+    <string name="beds">Plazas dormir</string>
+    <string name="seats">Plazas viajar</string>
+    <string name="success_booking">Reserva realizada correctamente</string>
+    <string name="logout_warning">Sesión cerrada</string>
+    <string name="vehicle_type">Tipo de vehículo</string>
+    <string name="search_all">Todos los vehículos</string>
+    <string name="success_signup">Usuario creado con éxito</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_mail">Invalid mail</string>
+    <string name="error_pass">Invalid password</string>
+    <string name="error_pass_match">Doesn\'t match</string>
+    <string name="error_no_checkinout">You must introduce checkin/out</string>
+    <string name="success_booking">Booking made correctly</string>
+    <string name="try_later">Error, try again  later</string>
+    <string name="error_date_disp">Date not available</string>
+    <string name="error_loading_booking">Failed to load bookings</string>
+    <string name="error_loading_images">Failed to load image</string>
+    <string name="year">Year</string>
+    <string name="search">Searching</string>
+    <string name="success_user_details">Changes made successfully</string>
+    <string name="required">Required field</string>
+    <string name="fuel">Fuel</string>
+    <string name="error_login">Wrong credentials</string>
+    <string name="search_from">" from "</string>
+    <string name="details">Vehicle details</string>
+    <string name="day">day</string>
+    <string name="edit">Edit</string>
+    <string name="search_city">" in "</string>
+    <string name="error_loading_users">Failed to load users</string>
+    <string name="error_loading_vehicles">Failed to load vehicles</string>
+    <string name="save_changes">Save changes</string>
+    <string name="brand">Brand</string>
+    <string name="plate">License plate</string>
+    <string name="model">Model</string>
+    <string name="owner">Owner\'s name</string>
+    <string name="beds">People sleep</string>
+    <string name="seats">People travel</string>
+    <string name="logout_warning">Logout</string>
+    <string name="vehicle_type">Vehicle type</string>
+    <string name="search_all">"User created successfully "</string>
+    <string name="success_signup">"User "</string>
+    <string name="search_to">" to "</string>
+</resources>
