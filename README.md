@@ -1,6 +1,6 @@
 # Weeknvan
 <p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg" width="200" >
+  <img src="https://github.com/arodriguezh09/weeknvan/blob/main/media/play_store_feature_graphic.png" width="300" >
 </p>
 
 -----
