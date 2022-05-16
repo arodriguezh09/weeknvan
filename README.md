@@ -24,6 +24,7 @@
 <a href="https://firebase.google.com/">
     <img src="https://firebase.google.com/images/brand-guidelines/logo-built_black.png" width="200">
 </a>
+<br>
 ⌛ En desarrollo...
 
 ## Manual
