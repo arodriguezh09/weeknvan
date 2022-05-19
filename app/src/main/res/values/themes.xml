@@ -4,27 +4,31 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/pantone_azul</item>
         <item name="colorPrimaryVariant">#037C72</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item> <!-- relleno de botones -->
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/pantone_limon</item>
+        <item name="colorSecondary">@color/adobe_violet_light</item>
         <item name="colorSecondaryVariant">@color/pantone_salmon</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.CamperBooking.Login" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pantone_azul</item>
-        <item name="colorPrimaryVariant">@color/pantone_limon</item>
-        <item name="colorOnPrimary">@color/white</item>
+    <item name="colorPrimary">@color/adobe_violet_light</item>  <!-- primario botones -->
+        <item name="colorPrimaryVariant">@color/adobe_violet_dark</item> <!-- barra menu -->
+        <item name="colorOnPrimary">@color/white</item> <!-- relleno botones -->
+        <item name="colorPrimaryDark" tools:targetApi="23">@color/black</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/pantone_limon</item>
-        <item name="colorSecondaryVariant">#FBD848</item>
+        <item name="colorSecondary">@color/white</item> <!-- idk -->
+        <item name="colorSecondaryVariant">@color/adobe_purple</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+
         <!-- Customize your theme here. -->
     </style>
 

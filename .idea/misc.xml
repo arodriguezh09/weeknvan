@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.328" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout-land/fragment_login.xml" value="0.425" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_login.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/layout-land/fragment_login.xml" value="0.34864864864864864" />

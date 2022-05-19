@@ -1,46 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".login.SignUpFragment"
-    >
+    android:theme="@style/Theme.CamperBooking.Login"
+    tools:context=".login.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="311dp"
-        android:layout_height="682dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25"
-        >
-
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_weeknvan"/>
+        app:layout_constraintVertical_bias="0.25">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRegMail"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLogo"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRegMail"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:hint="Correo"
                 android:inputType="text" />
@@ -49,55 +37,144 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRegPass"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="12dp"
             app:endIconMode="password_toggle"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilRegMail"
-            app:errorEnabled="true">
+            app:layout_constraintTop_toBottomOf="@+id/tilRegMail">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRegPass"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:hint="Contraseña"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRegPass2"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="12dp"
             app:endIconMode="password_toggle"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilRegPass"
-            app:errorEnabled="true">
+            app:layout_constraintTop_toBottomOf="@+id/tilRegPass">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRegPass2"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:hint="Repetir contraseña"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegPass2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Nombre"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegLastName"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegFirstName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegLastName"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Apellidos"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegPhone"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegLastName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegPhone"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Teléfono"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegNif"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilRegPhone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegNif"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="DNI (01234567A)"
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/bSignUp"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="0dp"
             android:text="Registrarse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilRegPass2"/>
+            app:layout_constraintTop_toBottomOf="@+id/tilRegNif" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:onClick="changeLogIn"
+        android:text="¿Ya tienes cuenta? Inicia sesión."
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

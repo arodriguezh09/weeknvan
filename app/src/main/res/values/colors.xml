@@ -27,4 +27,12 @@
     <color name="pantone_night_salmon">#916634</color>
     <color name="pantone_night_limon">#9A8A2A</color>
 
+    <!-- Paletas colores Adobe Colors de colorful_van.png -->
+
+    <color name="adobe_pink">#F21D6B</color>
+    <color name="adobe_purple">#BF308D</color>
+    <color name="adobe_violet_dark">#9A3FA6</color>
+    <color name="adobe_violet_light">#A649BF</color>
+    <color name="adobe_lavender">#D4B9FF</color>
+
 </resources>

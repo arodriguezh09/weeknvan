@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected FirebaseAuth mAuth;
 
-    private TextInputLayout tilUser;
-    private TextInputLayout tilPass;
+    //private TextInputLayout tilUser;
+    //private TextInputLayout tilPass;
     private InputMethodManager imm;
     private Intent it;
     //private FragmentTransaction ft;
@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeSignUp(View view) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frgSignUp).addToBackStack(null).commit();
+    }
+
+    public void changeLogIn(View view) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, frgLogin).addToBackStack(null).commit();
     }
 
     public void loginSuccesful(String mail) {

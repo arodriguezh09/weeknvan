@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".login.LoginFragment"
+    android:background="@color/white"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="311dp"
         android:layout_height="682dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,52 +24,64 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="32dp"
+            android:contentDescription="Logo de la aplicación"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="Logo de la aplicación"
 
-            app:srcCompat="@drawable/logo_weeknvan"
+            app:srcCompat="@drawable/colorful_van"
 
             />
 
+        <TextView
+            android:id="@+id/tvLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/varelaround_regular"
+            android:text="Weeknvan"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilUser"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivLogo">
+            app:layout_constraintTop_toBottomOf="@+id/tvLogo">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:hint="Correo"
-                android:inputType="text"/>
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPass"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginTop="12dp"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilUser">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:hint="Contraseña"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/bLogin"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="12dp"
             android:text="Iniciar Sesión"
@@ -77,15 +91,23 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <TextView
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/textView"
-        android:layout_width="159dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:onClick="changeSignUp"
-        android:text="Crear nueva cuenta"
-        android:textColor="@color/pantone_azul"
+        android:text="¿No tienes cuenta? Regístrate."
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
