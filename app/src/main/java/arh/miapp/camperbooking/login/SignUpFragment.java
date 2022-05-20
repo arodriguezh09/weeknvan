@@ -15,21 +15,40 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import arh.miapp.camperbooking.R;
+import arh.miapp.camperbooking.main.BottomNavigationActivity;
+import arh.miapp.camperbooking.objects.User;
 
 public class SignUpFragment extends Fragment {
 
     private TextInputLayout tilRegMail;
     private TextInputLayout tilRegPass;
     private TextInputLayout tilRegPass2;
+    private TextInputLayout tilRegFirstName;
+    private TextInputLayout tilRegLastName;
+    private TextInputLayout tilRegPhone;
+    private TextInputLayout tilRegNif;
     private Button bSignUp;
     private AwesomeValidation awesomeValidation;
     private boolean processing;
+    private DatabaseReference database3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +60,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         processing = false;
         View v = inflater.inflate(R.layout.fragment_sign_up, container, false);
-        tilRegMail = (TextInputLayout) v.findViewById(R.id.tilRegMail);
-        tilRegPass = (TextInputLayout) v.findViewById(R.id.tilRegPass);
-        tilRegPass2 = (TextInputLayout) v.findViewById(R.id.tilRegPass2);
-        bSignUp = (Button) v.findViewById(R.id.bSignUp);
+        findViews(v);
         bSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,12 +69,20 @@ public class SignUpFragment extends Fragment {
                 tilRegMail.setError(null);
                 tilRegPass.setError(null);
                 tilRegPass2.setError(null);
+                tilRegFirstName.setError(null);
+                tilRegLastName.setError(null);
+                tilRegPhone.setError(null);
+                tilRegNif.setError(null);
                 // Pillo el contenido de los til
                 String mail = tilRegMail.getEditText().getText().toString().trim();
                 String pass = tilRegPass.getEditText().getText().toString().trim();
                 String pass2 = tilRegPass2.getEditText().getText().toString().trim();
-                // Reviso que los campos no estén vacios
-                if (mail.isEmpty() || pass.isEmpty() || pass2.isEmpty()) {
+                String firstName = tilRegFirstName.getEditText().getText().toString().trim();
+                String lastName = tilRegLastName.getEditText().getText().toString().trim();
+                String phone = tilRegPhone.getEditText().getText().toString().trim();
+                String nif = tilRegNif.getEditText().getText().toString().trim();
+                // Reviso que los campos no estén vacios TODO cambiar por algo mas elegante
+                if (mail.isEmpty() || pass.isEmpty() || pass2.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty() || nif.isEmpty()) {
                     if (mail.isEmpty()) {
                         tilRegMail.setError(getString(R.string.required));
                     }
@@ -68,13 +92,25 @@ public class SignUpFragment extends Fragment {
                     if (pass2.isEmpty()) {
                         tilRegPass2.setError(getString(R.string.required));
                     }
+                    if (firstName.isEmpty()) {
+                        tilRegFirstName.setError(getString(R.string.required));
+                    }
+                    if (lastName.isEmpty()) {
+                        tilRegLastName.setError(getString(R.string.required));
+                    }
+                    if (phone.isEmpty()) {
+                        tilRegPhone.setError(getString(R.string.required));
+                    }
+                    if (nif.isEmpty()) {
+                        tilRegNif.setError(getString(R.string.required));
+                    }
                     return;
                 }
                 // Valido el mail
                 awesomeValidation.clear();
                 awesomeValidation.addValidation(getActivity(), R.id.tilRegMail, Patterns.EMAIL_ADDRESS, R.string.error_mail);
                 if (!awesomeValidation.validate()) {
-                    // TODO extra: el awesomeValidation hacer una buena porquería con el material design, currarse esto si hay tiempo
+                    // TODO extra: el awesomeValidation hace una buena porquería con el material design, currarse esto si hay tiempo
                     // si en vez de meter ese style me hago uno que tenga a este como padre y le pongo lo siguiente, queda bien pro
                     // <item name="android:textColor">@color/color_error</item>
                     // <item name="android:textSize">11sp</item>
@@ -104,6 +140,30 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // TODO push del usuario a realtime database
+                            database3 = FirebaseDatabase.getInstance().getReference("users");
+                            FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String user = currentFirebaseUser.getUid();
+                            String key = database3.push().getKey();
+                            Map<String, Object> bookingMap = new HashMap<>();
+                            bookingMap.put("firstName", firstName);
+                            bookingMap.put("idUser", user);
+                            bookingMap.put("lastName", lastName);
+                            bookingMap.put("nif", nif);
+                            bookingMap.put("phone", phone);
+                            bookingMap.put("mail", mail);
+                            database3.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), R.string.try_later, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
                             Toast.makeText(getActivity(), R.string.success_signup, Toast.LENGTH_SHORT).show();
                             // TODO extra: preguntar a Angel como puedo hacer para que haga eso SOLO si el backstack size es mayor a 0 ó a 1, idk.
                             // solucion fulera
@@ -120,6 +180,17 @@ public class SignUpFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    private void findViews(View v) {
+        tilRegMail = (TextInputLayout) v.findViewById(R.id.tilRegMail);
+        tilRegPass = (TextInputLayout) v.findViewById(R.id.tilRegPass);
+        tilRegPass2 = (TextInputLayout) v.findViewById(R.id.tilRegPass2);
+        tilRegFirstName = (TextInputLayout) v.findViewById(R.id.tilRegFirstName);
+        tilRegLastName = (TextInputLayout) v.findViewById(R.id.tilRegLastName);
+        tilRegPhone = (TextInputLayout) v.findViewById(R.id.tilRegPhone);
+        tilRegNif = (TextInputLayout) v.findViewById(R.id.tilRegNif);
+        bSignUp = (Button) v.findViewById(R.id.bSignUp);
     }
 
     private void showToast(String errorCode) {
