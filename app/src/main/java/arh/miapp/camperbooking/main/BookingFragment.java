@@ -70,6 +70,10 @@ public class BookingFragment extends Fragment {
         showVehicle();
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //String user = currentFirebaseUser.getUid();
+        //TODO ver si puedo hacer highlighting de las fechas que quiero bloquear
+        // https://developer.android.com/reference/com/google/android/material/datepicker/CalendarConstraints.DateValidator
+        // No parece nada fácil, aqui sale ejemplo https://stackoverflow.com/questions/68281693/how-to-highlight-dates-in-android-datepicker
+
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds())).build();
