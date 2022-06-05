@@ -6,6 +6,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import arh.miapp.camperbooking.R;
 
@@ -35,8 +38,14 @@ public class SearchFragment extends Fragment {
     Button bSearch;
     String city;
     Date checkin, checkout;
-    CardView cvSevilla;
-    CardView cvCaceres;
+
+    ListAdapterItemTop laTop; // crear la top
+    RecyclerView itemsTop;
+
+    ListAdapterItemBottom laBottom; // crear la bottom
+    RecyclerView itemsBottom;
+
+
 
 
     public SearchFragment() {
@@ -51,17 +60,11 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
-        cities = new ArrayList<>();
         fillList();
-        cvSevilla = v.findViewById(R.id.cvSevilla);
-        cvCaceres = v.findViewById(R.id.cvCaceres);
-        tilDDMenu = (TextInputLayout) v.findViewById(R.id.tilDDMenu);
-        etDDMenu = (AutoCompleteTextView) v.findViewById(R.id.tvDDMenu);
-        tilRangeDate = v.findViewById(R.id.tilRangeDate);
-        etRangeDate = v.findViewById(R.id.etRangeDate);
-        bSearch = v.findViewById(R.id.bSearch);
-        ArrayAdapter<String> citiesAdapter = new ArrayAdapter<>(getActivity(), R.layout.option_item, cities);
+        findViews(v);
+        // Adapter para el spinner
         // TODO extra: si elijo ciudad, cambio de fragment y vuelvo, solo me cargará esa ciudad. Por que? buena pregunta xd
+        ArrayAdapter<String> citiesAdapter = new ArrayAdapter<>(getActivity(), R.layout.option_item, cities);
         etDDMenu.setAdapter(citiesAdapter);
 
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
@@ -107,24 +110,62 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
-        cvSevilla.setOnClickListener(new View.OnClickListener() {
+        // Morralla
+
+        List<String> lista = new ArrayList<>();
+        lista.add("Hola");
+        lista.add("Hola");
+        lista.add("Hola");
+        lista.add("Hola");
+        lista.add("Hola");
+        lista.add("probando");
+
+        List<String> lista2 = new ArrayList<>();
+        lista2.add("Hola");
+        lista2.add("Hola");
+        lista2.add("Hola");
+        lista2.add("Hola");
+
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager2
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        laTop = new ListAdapterItemTop(lista2, getContext());
+        itemsTop = (RecyclerView) v.findViewById(R.id.itemRvTop);
+        itemsTop.setLayoutManager(layoutManager);
+        itemsTop.setAdapter(laTop);
+
+
+        laBottom = new ListAdapterItemBottom(lista, getContext());
+        itemsBottom = (RecyclerView) v.findViewById(R.id.itemRvBottom);
+        itemsBottom.setLayoutManager(layoutManager2);
+        /*laBottom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((BottomNavigationActivity) getActivity()).search("Sevilla", new Date(), new Date());
+                //frgDetails = new DetailsFragment(vehicleList.get(itemsBottom.getChildAdapterPosition(view)));
+                //((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
             }
-        });
-        cvCaceres.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((BottomNavigationActivity) getActivity()).search("Mérida", new Date(), new Date());
-            }
-        });
+        });*/
+        itemsBottom.setAdapter(laBottom);
+
         return v;
     }
 
+    // Método para buscar las views
+    private void findViews(View v) {
+        tilDDMenu = (TextInputLayout) v.findViewById(R.id.tilDDMenu);
+        etDDMenu = (AutoCompleteTextView) v.findViewById(R.id.tvDDMenu);
+        tilRangeDate = v.findViewById(R.id.tilRangeDate);
+        etRangeDate = v.findViewById(R.id.etRangeDate);
+        bSearch = v.findViewById(R.id.bSearch);
+    }
+
+    // Método que llena el spinner de ciudades
     private void fillList() {
         // TODO extra: llenar el arrayList con lo que recupere de la BBDD
         // Si no también está bien, ya que nos muestra posibilidades en las que no existirían campers disponibles y mostramos el mensaje
+        cities = new ArrayList<>();
         cities.add("Mérida");
         cities.add("Sevilla");
         cities.add("Cáceres");

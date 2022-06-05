@@ -34,5 +34,6 @@
     <color name="adobe_violet_dark">#9A3FA6</color>
     <color name="adobe_violet_light">#A649BF</color>
     <color name="adobe_lavender">#D4B9FF</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>
