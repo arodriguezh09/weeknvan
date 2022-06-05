@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.VehiclesUploadFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/amarillo">
+        <TextView
+            android:id="@+id/tvVehiclesTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Añadir vehículo"
+            android:layout_margin="10dp"
+            android:textSize="20dp"/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehModel"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Modelo"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehYear"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Año"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehPlate"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehPlate"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Matrícula"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehType"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehType"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Tipo"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehFuel"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehFuel"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Combustible"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehPassengers"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehPassengers"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Asientos"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehBeds"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehBeds"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Camas"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehCity"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Ciudad"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehDescription"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Descripción"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVehPricePerDay"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVehPricePerDay"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:hint="Precio por día"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

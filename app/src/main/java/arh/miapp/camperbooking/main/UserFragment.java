@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -27,10 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import arh.miapp.camperbooking.R;
+import arh.miapp.camperbooking.login.LoginFragment;
 import arh.miapp.camperbooking.login.MainActivity;
 import arh.miapp.camperbooking.objects.User;
 
 public class UserFragment extends Fragment {
+
+    DatabaseReference userDB;
 
     User user;
 
@@ -46,8 +50,11 @@ public class UserFragment extends Fragment {
     EditText etUserMail;
     EditText etUserPhone;
 
+    Fragment frgVehUpload;
+
     Button bUserEdit;
     Button bLogout;
+    Button bAddVehicle;
 
     boolean found = false;
     boolean edit = true;
@@ -63,9 +70,10 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
         viewBinding(v);
+        frgVehUpload = new VehiclesUploadFragment();
         user = new User();
-        ((BottomNavigationActivity) getActivity()).database3 = FirebaseDatabase.getInstance().getReference("users");
-        ((BottomNavigationActivity) getActivity()).database3.addValueEventListener(new ValueEventListener() {
+        userDB = FirebaseDatabase.getInstance().getReference("users");
+        userDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -112,7 +120,7 @@ public class UserFragment extends Fragment {
                     }else{
                         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         String user = currentFirebaseUser.getUid();
-                        String key = ((BottomNavigationActivity) getActivity()).database3.push().getKey();
+                        String key = userDB.push().getKey();
                         Map<String, Object> bookingMap = new HashMap<>();
                         bookingMap.put("firstName", etUserName.getText().toString());
                         bookingMap.put("idUser", user);
@@ -122,7 +130,7 @@ public class UserFragment extends Fragment {
                         bookingMap.put("mail", etUserMail.getText().toString());
                         // Si lo he encontrado antes, existe, así que actualizo.
                         if (found){
-                            ((BottomNavigationActivity) getActivity()).database3.child(userKey).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            userDB.child(userKey).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getActivity(), R.string.success_user_details, Toast.LENGTH_SHORT).show();
@@ -137,7 +145,7 @@ public class UserFragment extends Fragment {
                             });
                         } else {
                             // Si no lo he encontrado antes, no existe, así que lo creo.
-                            ((BottomNavigationActivity) getActivity()).database3.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            userDB.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getActivity(), R.string.success_user_details, Toast.LENGTH_SHORT).show();
@@ -153,6 +161,12 @@ public class UserFragment extends Fragment {
                         }
                     }
                 }
+            }
+        });
+        bAddVehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BottomNavigationActivity) getActivity()).loadFragment(frgVehUpload, true);
             }
         });
         return v;
@@ -179,6 +193,7 @@ public class UserFragment extends Fragment {
         etUserPhone = v.findViewById(R.id.etUserPhone);
         bUserEdit = v.findViewById(R.id.bUserEdit);
         bLogout = v.findViewById(R.id.bLogout);
+        bAddVehicle = v.findViewById(R.id.bAddVehicle);
         editMode();
     }
 

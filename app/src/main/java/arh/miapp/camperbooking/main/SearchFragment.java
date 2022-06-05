@@ -39,10 +39,10 @@ public class SearchFragment extends Fragment {
     String city;
     Date checkin, checkout;
 
-    ListAdapterItemTop laTop; // crear la top
+    ListAdapterItemTop laTop;
     RecyclerView itemsTop;
 
-    ListAdapterItemBottom laBottom; // crear la bottom
+    ListAdapterItemBottom laBottom;
     RecyclerView itemsBottom;
 
 
@@ -66,7 +66,6 @@ public class SearchFragment extends Fragment {
         // TODO extra: si elijo ciudad, cambio de fragment y vuelvo, solo me cargará esa ciudad. Por que? buena pregunta xd
         ArrayAdapter<String> citiesAdapter = new ArrayAdapter<>(getActivity(), R.layout.option_item, cities);
         etDDMenu.setAdapter(citiesAdapter);
-
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds())).build();
