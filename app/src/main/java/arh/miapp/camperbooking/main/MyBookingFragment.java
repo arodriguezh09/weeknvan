@@ -34,13 +34,12 @@ import java.util.Date;
 import java.util.List;
 
 import arh.miapp.camperbooking.R;
-import arh.miapp.camperbooking.listadapters.ListAdapter;
+import arh.miapp.camperbooking.listadapters.ListAdapterBooking;
 import arh.miapp.camperbooking.objects.Booking;
 import arh.miapp.camperbooking.objects.Vehicle;
 
-public class VehiclesFragment extends Fragment {
+public class MyBookingFragment extends Fragment {
 
-    TextView tvVehiclesTitle;
     TextView tvMessage404;
     List<Vehicle> vehicleList;
     List<Booking> bookingList;
@@ -48,25 +47,10 @@ public class VehiclesFragment extends Fragment {
     Fragment frgDetails;
     DatabaseReference dbVehicles;
     StorageReference storageRef;
-    ListAdapter la;
+    ListAdapterBooking laBooking;
     String city;
     Date checkin, checkout;
-    boolean searchAll = false;
     String userId;
-
-    public VehiclesFragment() {
-        searchAll = true;
-    }
-
-    public VehiclesFragment(String city, Date checkin, Date checkout) {
-        this.city = city;
-        this.checkin = checkin;
-        this.checkout = checkout;
-    }
-
-    public VehiclesFragment(String userId) {
-        this.userId = userId;
-    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +61,12 @@ public class VehiclesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_vehicles, container, false);
-        tvVehiclesTitle = v.findViewById(R.id.tvVehiclesTitle);
-        tvMessage404 = v.findViewById(R.id.tvMessage404);
+        View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
+
+        tvMessage404 = v.findViewById(R.id.tvMessage404book);
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+
         if (checkin != null || checkout != null) {
             String stringCheckin = formatter.format(checkin);
             String stringCheckout = formatter.format(checkout);
@@ -94,12 +80,8 @@ public class VehiclesFragment extends Fragment {
             } else {
                 tvContent = getString(R.string.search_all);
             }
-            tvVehiclesTitle.setText(tvContent);
         }
-        if (userId != null) {
-            tvVehiclesTitle.setText("Mis reservas");
-        }
-        la = new ListAdapter(vehicleList, getContext());
+        laBooking = new ListAdapterBooking(vehicleList, bookingList, getContext());
         dbVehicles = ((BottomNavigationActivity) getActivity()).database;
         storageRef = ((BottomNavigationActivity) getActivity()).storageRef;
         dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles");
@@ -117,7 +99,7 @@ public class VehiclesFragment extends Fragment {
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
                                 vehicle.setBitmap(bitmap);
-                                la.notifyDataSetChanged();
+                                laBooking.notifyDataSetChanged();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -129,32 +111,9 @@ public class VehiclesFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    // Si tengo filtros
-                    if (!searchAll && userId == null) {
-                        boolean reserved = false;
-                        for (Booking booking : bookingList) {
-                            if (booking.isReserved(checkin, checkout, vehicle.getPlate())) {
-                                reserved = true;
-                            }
-                        }
-                        // si no esta reservada y la ciudad me vale, añade
-                        if (!reserved && (city.equals("") || vehicle.getCity().equals(city))) {
-                            // Si tengo filtros:
-                            vehicleList.add(vehicle);
-                            la.notifyDataSetChanged();
-                        }
-                    } else if (userId != null) {
-                        for (Booking booking : bookingList) {
-                            if (userId.equals(booking.getIdUser()) && vehicle.getPlate().equals(booking.getPlate())) {
-                                vehicleList.add(vehicle);
-                            }
-                        }
-                    } else {
-                        //Si busco todos
-                        vehicleList.add(vehicle);
-                    }
+                    vehicleList.add(vehicle);
                 }
-                la.notifyDataSetChanged();
+                laBooking.notifyDataSetChanged();
                 checkList();
             }
 
@@ -170,16 +129,16 @@ public class VehiclesFragment extends Fragment {
 
             }
         });
-        rvVehicles = (RecyclerView) v.findViewById(R.id.rvVehicles);
+        rvVehicles = (RecyclerView) v.findViewById(R.id.rvVehiclesBooking);
         rvVehicles.setLayoutManager(new LinearLayoutManager(getContext()));
-        la.setOnClickListener(new View.OnClickListener() {
+        laBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 frgDetails = new DetailsFragment(vehicleList.get(rvVehicles.getChildAdapterPosition(view)));
                 ((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
             }
         });
-        rvVehicles.setAdapter(la);
+        rvVehicles.setAdapter(laBooking);
 
         return v;
     }

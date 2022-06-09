@@ -5,10 +5,13 @@
       <map>
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.328" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout-land/fragment_login.xml" value="0.425" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_bottom_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_login.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_booking.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_my_booking.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_search.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/fragment_user.xml" value="0.36666666666666664" />
@@ -18,6 +21,7 @@
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/rv_booking.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/rv_search_element.xml" value="1.0" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/rv_vehicle.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/menu/bottom_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/elale/Desktop/cagada/CamperBooking/app/src/main/res/layout-land/fragment_login.xml" value="0.34864864864864864" />

@@ -1,4 +1,4 @@
-package arh.miapp.camperbooking.main;
+package arh.miapp.camperbooking.listadapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

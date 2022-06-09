@@ -47,7 +47,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
         searchFragment = new SearchFragment();
         favsFragment = new VehiclesFragment();
         userFragment = new UserFragment();
-        myBookingFragment = new VehiclesFragment(user);
+        myBookingFragment = new MyBookingFragment();
         database2 = FirebaseDatabase.getInstance().getReference("bookings");
         database2.addValueEventListener(new ValueEventListener() {
             @Override

@@ -2,7 +2,6 @@ package arh.miapp.camperbooking.main;
 
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import androidx.core.util.Pair;
@@ -27,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 import arh.miapp.camperbooking.R;
+import arh.miapp.camperbooking.listadapters.ListAdapterItemBottom;
+import arh.miapp.camperbooking.listadapters.ListAdapterItemTop;
 
 public class SearchFragment extends Fragment {
 

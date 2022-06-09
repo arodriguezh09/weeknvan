@@ -15,6 +15,7 @@ public class Vehicle implements Serializable {
     private String city;
     private String type;
     private String description;
+    private String idUser;
     private int year;
     private int passengers;
     private int beds;
@@ -31,7 +32,7 @@ public class Vehicle implements Serializable {
 
     private Bitmap bitmap;
 
-    public Vehicle(){
+    public Vehicle() {
 
     }
 
@@ -120,9 +121,12 @@ public class Vehicle implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public String getIdUser() { return idUser; }
+
+    public void setIdUser(String idUser) { this.idUser = idUser; }
 
     public int getYear() {
         return year;
