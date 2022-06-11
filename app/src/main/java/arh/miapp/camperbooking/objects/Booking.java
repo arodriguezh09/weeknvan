@@ -10,6 +10,18 @@ public class Booking {
     private String plate;
     private String checkin;
     private String checkout;
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "idUser='" + idUser + '\'' +
+                ", plate='" + plate + '\'' +
+                ", checkin='" + checkin + '\'' +
+                ", checkout='" + checkout + '\'' +
+                ", grandTotal=" + grandTotal +
+                '}';
+    }
+
     private double grandTotal;
 
     public Booking() {

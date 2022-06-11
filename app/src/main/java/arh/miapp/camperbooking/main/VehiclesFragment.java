@@ -109,26 +109,6 @@ public class VehiclesFragment extends Fragment {
                 vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
-                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
-                    try {
-                        File localfile = File.createTempFile("tmp" + vehicle.getPlate(), ".jpg");
-                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
-                                vehicle.setBitmap(bitmap);
-                                la.notifyDataSetChanged();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getActivity(), "Puede que el servidor haya expirado, dimelo y lo arreglo", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     // Si tengo filtros
                     if (!searchAll && userId == null) {
                         boolean reserved = false;
@@ -154,6 +134,8 @@ public class VehiclesFragment extends Fragment {
                         vehicleList.add(vehicle);
                     }
                 }
+                // Me bajo las fotos de los vehiculos
+                getPhotos();
                 la.notifyDataSetChanged();
                 checkList();
             }
@@ -170,6 +152,7 @@ public class VehiclesFragment extends Fragment {
 
             }
         });
+
         rvVehicles = (RecyclerView) v.findViewById(R.id.rvVehicles);
         rvVehicles.setLayoutManager(new LinearLayoutManager(getContext()));
         la.setOnClickListener(new View.OnClickListener() {
@@ -182,5 +165,30 @@ public class VehiclesFragment extends Fragment {
         rvVehicles.setAdapter(la);
 
         return v;
+    }
+
+    private void getPhotos() {
+        for(Vehicle ve : vehicleList){
+            storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + ve.getPhoto() + ".jpg");
+            try {
+                File localfile = File.createTempFile("tmp" + ve.getPlate(), ".jpg");
+                storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                        ve.setBitmap(bitmap);
+                        la.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Puede que el servidor haya expirado, dimelo y lo arreglo", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
