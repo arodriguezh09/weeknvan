@@ -7,27 +7,28 @@
     android:orientation="vertical"
     tools:context=".main.BookingFragment">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/adobe_lavender"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tvVehiclesTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tu perfil"
                     android:layout_margin="10dp"
-                    android:textSize="20dp"/>
+                    android:text="Tu perfil"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -113,6 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Editar" />
+
             <Button
                 android:id="@+id/bLogout"
                 android:layout_width="wrap_content"
@@ -126,19 +128,29 @@
                 android:layout_height="wrap_content"
                 android:background="@color/adobe_lavender"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tus vehículos"
                     android:layout_margin="10dp"
-                    android:textSize="20dp"/>
+                    android:text="Tus vehículos"
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <!-- aqui va un rv con mis vehiculos y un botón de añadir -->
             <!--  -->
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userRvVehicle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/bAddVehicle"
                 android:layout_width="wrap_content"
@@ -149,7 +161,7 @@
                 android:text="Añadir vehículo" />
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>

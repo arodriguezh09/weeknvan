@@ -91,7 +91,6 @@ public class MyBookingFragment extends Fragment {
 
         getBookingsOut();
         getBookingsIn();
-
         getVehicles();
 
         rvVehicles = (RecyclerView) v.findViewById(R.id.rvVehiclesBooking);

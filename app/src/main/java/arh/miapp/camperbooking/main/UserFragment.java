@@ -1,10 +1,14 @@
 package arh.miapp.camperbooking.main;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,18 +27,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import arh.miapp.camperbooking.R;
-import arh.miapp.camperbooking.login.LoginFragment;
+import arh.miapp.camperbooking.listadapters.ListAdapterUser;
 import arh.miapp.camperbooking.login.MainActivity;
 import arh.miapp.camperbooking.objects.User;
+import arh.miapp.camperbooking.objects.Vehicle;
 
 public class UserFragment extends Fragment {
 
     DatabaseReference userDB;
+    DatabaseReference dbVehicles;
+    StorageReference storageRef;
 
     User user;
 
@@ -50,15 +63,22 @@ public class UserFragment extends Fragment {
     EditText etUserMail;
     EditText etUserPhone;
 
-    Fragment frgVehUpload;
+    Fragment frgVehUpload = new VehiclesUploadFragment();
+    Fragment frgDetails;
 
     Button bUserEdit;
     Button bLogout;
     Button bAddVehicle;
 
+    RecyclerView userRvVehicle;
+
     boolean found = false;
     boolean edit = true;
     String userKey;
+    String uid;
+    ArrayList<Vehicle> vehicles;
+
+    ListAdapterUser listAdapterUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,25 +90,19 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
         viewBinding(v);
-        frgVehUpload = new VehiclesUploadFragment();
         user = new User();
+
+        vehicles = new ArrayList<>();
+
+        // Busco a mi usuario para mostrar sus detalles
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userDB = FirebaseDatabase.getInstance().getReference("users");
-        userDB.addValueEventListener(new ValueEventListener() {
+        userDB.orderByChild("idUser").equalTo(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = currentFirebaseUser.getUid();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User u = dataSnapshot.getValue(User.class);
-                    if (u.getIdUser().equals(userId)) {
-                        userKey = dataSnapshot.getKey();
-                        found = true;
-                        user = u;
-                        break;
-                    }
-                }
-                if (found) {
-                    retrieveUser();
+                    userKey = dataSnapshot.getKey();
+                    retrieveUser(dataSnapshot.getValue(User.class));
                 }
             }
 
@@ -97,6 +111,59 @@ public class UserFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.error_loading_users, Toast.LENGTH_SHORT).show();
             }
         });
+
+        listAdapterUser = new ListAdapterUser(vehicles, getContext());
+        // Busco mis vehículos para mostrar sus detalles
+        //getVehicles();
+        dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles");
+        dbVehicles.orderByChild("idUser").equalTo(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vehicles.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
+                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
+                    try {
+                        File localfile = File.createTempFile("tmp" + vehicle.getPlate(), ".jpg");
+                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                vehicle.setBitmap(bitmap);
+                                listAdapterUser.notifyDataSetChanged();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    vehicles.add(vehicle);
+                }
+                listAdapterUser.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_vehicles, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        userRvVehicle = (RecyclerView) v.findViewById(R.id.userRvVehicle);
+        userRvVehicle.setLayoutManager(new LinearLayoutManager(getContext()));
+        listAdapterUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                frgDetails = new DetailsFragment(vehicles.get(userRvVehicle.getChildAdapterPosition(view)));
+                ((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
+            }
+        });
+        userRvVehicle.setAdapter(listAdapterUser);
+        // Listener al boton de logout
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +172,8 @@ public class UserFragment extends Fragment {
                 goLogin();
             }
         });
+
+        // Listener al boton de editar/guardar multifuncional
         bUserEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,7 +186,7 @@ public class UserFragment extends Fragment {
                     if (etUserName.getText().equals("") || etUserPhone.getText().equals("") || etUserSurname.getText().equals("") ||
                             etUserNif.getText().equals("") || etUserMail.getText().equals("")) {
                         Toast.makeText(getActivity(), R.string.required, Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         String user = currentFirebaseUser.getUid();
                         String key = userDB.push().getKey();
@@ -129,7 +198,7 @@ public class UserFragment extends Fragment {
                         bookingMap.put("phone", etUserPhone.getText().toString());
                         bookingMap.put("mail", etUserMail.getText().toString());
                         // Si lo he encontrado antes, existe, así que actualizo.
-                        if (found){
+                        if (found) {
                             userDB.child(userKey).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -144,7 +213,12 @@ public class UserFragment extends Fragment {
                                 }
                             });
                         } else {
-                            // Si no lo he encontrado antes, no existe, así que lo creo.
+
+                            // ***************************************************************************************************************************************
+                            //  Esta opcion ya no esta disponible, ya que con la nueva actualizacion se guardan los detalles desde el registro. Aun asi, la mantengo.
+                            // ***************************************************************************************************************************************
+
+                            // Si no lo he encontrado antes, no existe, asi que lo creo.
                             userDB.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
@@ -163,6 +237,8 @@ public class UserFragment extends Fragment {
                 }
             }
         });
+
+        // Listener al botón de añadir vehículo, abrirá el fragment
         bAddVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +248,49 @@ public class UserFragment extends Fragment {
         return v;
     }
 
-    private void retrieveUser() {
+    private void getVehicles() {
+        // buscamos los vehículos que nos interesen
+        dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles");
+        dbVehicles.orderByChild("idUser").equalTo(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                vehicles.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
+                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
+                    try {
+                        File localfile = File.createTempFile("tmp" + vehicle.getPlate(), ".jpg");
+                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                vehicle.setBitmap(bitmap);
+                                listAdapterUser.notifyDataSetChanged();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    vehicles.add(vehicle);
+                }
+                listAdapterUser.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_vehicles, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    private void retrieveUser(User user) {
         etUserName.setText(user.getFirstName());
         etUserSurname.setText(user.getLastName());
         etUserNif.setText(user.getNif());
@@ -180,7 +298,7 @@ public class UserFragment extends Fragment {
         etUserPhone.setText(user.getPhone());
     }
 
-    private void viewBinding(View v) {
+    private void viewBinding(@NonNull View v) {
         tilUserName = v.findViewById(R.id.tilUserName);
         tilUserSurname = v.findViewById(R.id.tilUserSurname);
         tilUserNif = v.findViewById(R.id.tilUserNif);
@@ -194,6 +312,8 @@ public class UserFragment extends Fragment {
         bUserEdit = v.findViewById(R.id.bUserEdit);
         bLogout = v.findViewById(R.id.bLogout);
         bAddVehicle = v.findViewById(R.id.bAddVehicle);
+        userRvVehicle = v.findViewById(R.id.userRvVehicle);
+
         editMode();
     }
 
