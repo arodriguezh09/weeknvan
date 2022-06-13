@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvVehiclesBooking"
+                    android:id="@+id/rvVehiclesBookingOut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="100dp" />
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvVehiclesBooking2"
+                    android:id="@+id/rvVehiclesBookingIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="100dp" />

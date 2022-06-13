@@ -19,6 +19,11 @@ import android.widget.Toast;
 import com.ablanco.zoomy.Zoomy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -53,6 +58,7 @@ public class DetailsFragment extends Fragment {
     Button bDetailsBook;
 
     StorageReference storageRef;
+    DatabaseReference dbVehicles;
 
 
     public DetailsFragment(Vehicle vehicle) {
@@ -64,6 +70,7 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_details, container, false);
         viewBinding(v);
+        /*
 
         storageRef = ((BottomNavigationActivity) getActivity()).storageRef;
         storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
@@ -85,6 +92,8 @@ public class DetailsFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+         */
+        getPhotos();
 
         Zoomy.Builder builder = new Zoomy.Builder(getActivity())
                 .target(ivDetails)
@@ -103,6 +112,44 @@ public class DetailsFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void getPhotos() {
+        dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/" + vehicle.getPlate());
+        dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String path = dataSnapshot.getValue(String.class);
+                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference(path);
+                    try {
+                        File localfile = File.createTempFile("tmp" + vehicle.getPlate() + "thumbnail", ".jpg");
+                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                ivDetails.setImageBitmap(bitmap);
+                                ivDetails.setVisibility(View.VISIBLE);
+                                //la.notifyDataSetChanged();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void viewBinding(View v) {
@@ -125,9 +172,9 @@ public class DetailsFragment extends Fragment {
         DecimalFormat df = new DecimalFormat("0.00");
 
         tvDetailsPrice.setText(df.format(vehicle.getPricePerDay()) + "€/" + getString(R.string.day));
-        tvDetailsBrand.setText(getString(R.string.brand)+ ": " + vehicle.getBrand());
+        tvDetailsBrand.setText(getString(R.string.brand) + ": " + vehicle.getBrand());
         tvDetailsModel.setText(getString(R.string.model) + ": " + vehicle.getModel());
-        tvDetailsType.setText(getString(R.string.vehicle_type)+ ": " + vehicle.getType());
+        tvDetailsType.setText(getString(R.string.vehicle_type) + ": " + vehicle.getType());
         tvDetailsFuel.setText(getString(R.string.fuel) + ": " + vehicle.getFuel());
         tvDetailsPlate.setText(getString(R.string.plate) + ": " + vehicle.getPlate());
         tvDetailsOwner.setText(getString(R.string.owner) + ": " + vehicle.getOwner());

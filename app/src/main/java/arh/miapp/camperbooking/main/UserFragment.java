@@ -114,7 +114,8 @@ public class UserFragment extends Fragment {
 
         listAdapterUser = new ListAdapterUser(vehicles, getContext());
         // Busco mis vehículos para mostrar sus detalles
-        //getVehicles();
+        getVehicles();
+        /*
         dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles");
         dbVehicles.orderByChild("idUser").equalTo(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -152,6 +153,8 @@ public class UserFragment extends Fragment {
 
             }
         });
+
+         */
 
         userRvVehicle = (RecyclerView) v.findViewById(R.id.userRvVehicle);
         userRvVehicle.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -257,27 +260,9 @@ public class UserFragment extends Fragment {
                 vehicles.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
-                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
-                    try {
-                        File localfile = File.createTempFile("tmp" + vehicle.getPlate(), ".jpg");
-                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
-                                vehicle.setBitmap(bitmap);
-                                listAdapterUser.notifyDataSetChanged();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     vehicles.add(vehicle);
                 }
+                getPhotos();
                 listAdapterUser.notifyDataSetChanged();
             }
 
@@ -288,6 +273,44 @@ public class UserFragment extends Fragment {
             }
         });
 
+    }
+
+    public void getPhotos(){
+        for(Vehicle ve : vehicles){
+            dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/"+ve.getPlate());
+            dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String path = dataSnapshot.getValue(String.class);
+                        storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference(path);
+                        try {
+                            File localfile = File.createTempFile("tmp" + ve.getPlate() + "thumbnail", ".jpg");
+                            storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                    ve.setBitmap(bitmap);
+                                    listAdapterUser.notifyDataSetChanged();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void retrieveUser(User user) {

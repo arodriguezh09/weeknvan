@@ -45,8 +45,8 @@ public class MyBookingFragment extends Fragment {
     List<Booking> bookingListOut;
     List<Booking> bookingListIn;
 
-    RecyclerView rvVehicles;
-    RecyclerView rvVehicles2;
+    RecyclerView rvVehiclesOut;
+    RecyclerView rvVehiclesIn;
 
     Fragment frgDetails;
 
@@ -56,8 +56,8 @@ public class MyBookingFragment extends Fragment {
     StorageReference storageRef;
     String uid;
 
-    ListAdapterBooking laBooking;
-    ListAdapterBooking laBooking2;
+    ListAdapterBooking laBookingIn;
+    ListAdapterBooking laBookingOut;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,33 +72,26 @@ public class MyBookingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
         // View binding del mensaje vacio
         tvMessage404 = v.findViewById(R.id.tvMessage404book);
-        //TODO formatear fecha
-       /*
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
-        String stringCheckin = formatter.format(checkin);
-        String stringCheckout = formatter.format(checkout);
-        */
 
         // Recuperamos el id del usuario para buscar sus reservas y sus vehiculos
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        //
         // Creo el listadapterbooking
-        laBooking = new ListAdapterBooking(vehicleList, bookingListOut, getContext());
-        laBooking2 = new ListAdapterBooking(vehicleList, bookingListIn, getContext());
+        laBookingIn = new ListAdapterBooking(vehicleList, bookingListIn, getContext());
+        laBookingOut = new ListAdapterBooking(vehicleList, bookingListOut, getContext());
         dbBooking = FirebaseDatabase.getInstance().getReference("bookings");
         dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles");
 
-        getBookingsOut();
         getBookingsIn();
+        getBookingsOut();
         getVehicles();
 
-        rvVehicles = (RecyclerView) v.findViewById(R.id.rvVehiclesBooking);
-        rvVehicles.setLayoutManager(new LinearLayoutManager(getContext()));
-        laBooking.setOnClickListener(new View.OnClickListener() {
+        rvVehiclesOut = (RecyclerView) v.findViewById(R.id.rvVehiclesBookingOut);
+        rvVehiclesOut.setLayoutManager(new LinearLayoutManager(getContext()));
+        laBookingOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String plate = bookingListOut.get(rvVehicles.getChildAdapterPosition(view)).getPlate();
+                String plate = bookingListOut.get(rvVehiclesOut.getChildAdapterPosition(view)).getPlate();
                 Vehicle vehicle = new Vehicle();
                 for (Vehicle v : vehicleList){
                     if (v.getPlate().equals(plate)){
@@ -109,14 +102,14 @@ public class MyBookingFragment extends Fragment {
                 ((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
             }
         });
-        rvVehicles.setAdapter(laBooking);
+        rvVehiclesOut.setAdapter(laBookingOut);
 
-        rvVehicles2 = (RecyclerView) v.findViewById(R.id.rvVehiclesBooking2);
-        rvVehicles2.setLayoutManager(new LinearLayoutManager(getContext()));
-        laBooking2.setOnClickListener(new View.OnClickListener() {
+        rvVehiclesIn = (RecyclerView) v.findViewById(R.id.rvVehiclesBookingIn);
+        rvVehiclesIn.setLayoutManager(new LinearLayoutManager(getContext()));
+        laBookingIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String plate = bookingListIn.get(rvVehicles2.getChildAdapterPosition(view)).getPlate();
+                String plate = bookingListIn.get(rvVehiclesIn.getChildAdapterPosition(view)).getPlate();
                 Vehicle vehicle = new Vehicle();
                 for (Vehicle v : vehicleList){
                     if (v.getPlate().equals(plate)){
@@ -127,7 +120,7 @@ public class MyBookingFragment extends Fragment {
                 ((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
             }
         });
-        rvVehicles2.setAdapter(laBooking2);
+        rvVehiclesIn.setAdapter(laBookingIn);
 
         return v;
     }
@@ -142,7 +135,7 @@ public class MyBookingFragment extends Fragment {
                     Booking b = dataSnapshot.getValue(Booking.class);
                     bookingListOut.add(b);
                 }
-                laBooking.notifyDataSetChanged();
+                laBookingOut.notifyDataSetChanged();
             }
 
             @Override
@@ -166,19 +159,19 @@ public class MyBookingFragment extends Fragment {
                 if (plates.isEmpty()) {
                     return;
                 }
-
+                bookingListIn.clear();
                 // Por cada matricula iteramos las reservas
                 for (String plate : plates) {
                     //Lanzamos la query en busca de reservas con la matrícula
                     dbBooking.orderByChild("plate").equalTo(plate).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            bookingListIn.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                // Itera, lee bien matriculas
                                 Booking b = dataSnapshot.getValue(Booking.class);
                                 bookingListIn.add(b);
                             }
-                            laBooking2.notifyDataSetChanged();
+                            laBookingIn.notifyDataSetChanged();
                         }
 
                         @Override
@@ -190,6 +183,7 @@ public class MyBookingFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -202,31 +196,11 @@ public class MyBookingFragment extends Fragment {
                 vehicleList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Vehicle vehicle = dataSnapshot.getValue(Vehicle.class);
-                    storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + vehicle.getPhoto() + ".jpg");
-                    try {
-                        File localfile = File.createTempFile("tmp" + vehicle.getPlate(), ".jpg");
-                        storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
-                                vehicle.setBitmap(bitmap);
-                                laBooking.notifyDataSetChanged();
-                                laBooking2.notifyDataSetChanged();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getActivity(), "Puede que el servidor haya expirado, dimelo y lo arreglo", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     vehicleList.add(vehicle);
                 }
-                laBooking.notifyDataSetChanged();
-                laBooking2.notifyDataSetChanged();
+                laBookingOut.notifyDataSetChanged();
+                laBookingIn.notifyDataSetChanged();
+                getPhotos();
                 checkList();
             }
 
@@ -242,5 +216,43 @@ public class MyBookingFragment extends Fragment {
 
             }
         });
+    }
+
+    public void getPhotos(){
+        for(Vehicle ve : vehicleList){
+            dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/"+ve.getPlate());
+            dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String path = dataSnapshot.getValue(String.class);
+                        storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference(path);
+                        try {
+                            File localfile = File.createTempFile("tmp" + ve.getPlate() + "thumbnail", ".jpg");
+                            storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                    ve.setBitmap(bitmap);
+                                    laBookingOut.notifyDataSetChanged();
+                                    laBookingIn.notifyDataSetChanged();                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

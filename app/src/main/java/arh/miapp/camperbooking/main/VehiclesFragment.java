@@ -203,7 +203,7 @@ public class VehiclesFragment extends Fragment {
                     Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
                 }
             });
-
+        }
 
             /*
             storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + ve.getPhoto() + ".jpg");
@@ -227,6 +227,6 @@ public class VehiclesFragment extends Fragment {
                 e.printStackTrace();
             }
              */
-        }
+
     }
 }
