@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ablanco.zoomy.Zoomy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.slider.Slider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,12 +28,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import arh.miapp.camperbooking.R;
+import arh.miapp.camperbooking.listadapters.SliderAdapter;
 import arh.miapp.camperbooking.objects.Vehicle;
 
 public class DetailsFragment extends Fragment {
@@ -41,6 +46,9 @@ public class DetailsFragment extends Fragment {
     Bundle b;
 
     ImageView ivDetails;
+    SliderView sliderView;
+    ArrayList<Bitmap> images;
+    SliderAdapter sliderAdapter;
 
     TextView tvDetailsPrice;
     TextView tvDetailsBrand;
@@ -48,7 +56,7 @@ public class DetailsFragment extends Fragment {
     TextView tvDetailsType;
     TextView tvDetailsFuel;
     TextView tvDetailsPlate;
-    TextView tvDetailsOwner;
+    //TextView tvDetailsOwner;
     TextView tvDetailsMore;
     TextView tvDetailsSeats;
     TextView tvDetailsSleep;
@@ -93,15 +101,13 @@ public class DetailsFragment extends Fragment {
             e.printStackTrace();
         }
          */
+        images = new ArrayList<>();
         getPhotos();
-
-        Zoomy.Builder builder = new Zoomy.Builder(getActivity())
-                .target(ivDetails)
-                .animateZooming(true)
-                .enableImmersiveMode(false);
-        builder.register();
-
         chargeData();
+
+
+        sliderAdapter = new SliderAdapter(images);
+        sliderView.setSliderAdapter(sliderAdapter);
 
         bDetailsBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +121,9 @@ public class DetailsFragment extends Fragment {
     }
 
     private void getPhotos() {
+        images.clear();
         dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/" + vehicle.getPlate());
-        dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
+        dbVehicles.child("photos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -128,8 +135,10 @@ public class DetailsFragment extends Fragment {
                             @Override
                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                 Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
-                                ivDetails.setImageBitmap(bitmap);
-                                ivDetails.setVisibility(View.VISIBLE);
+                                images.add(bitmap);
+                                sliderAdapter.notifyDataSetChanged();
+                                //ivDetails.setImageBitmap(bitmap);
+                                //ivDetails.setVisibility(View.VISIBLE);
                                 //la.notifyDataSetChanged();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -161,11 +170,12 @@ public class DetailsFragment extends Fragment {
         tvDetailsType = (TextView) v.findViewById(R.id.tvDetailsType);
         tvDetailsFuel = (TextView) v.findViewById(R.id.tvDetailsFuel);
         tvDetailsPlate = (TextView) v.findViewById(R.id.tvDetailsPlate);
-        tvDetailsOwner = (TextView) v.findViewById(R.id.tvDetailsOwner);
+        //tvDetailsOwner = (TextView) v.findViewById(R.id.tvDetailsOwner);
         tvDetailsMore = (TextView) v.findViewById(R.id.tvDetailsMore);
         tvDetailsSeats = (TextView) v.findViewById(R.id.tvDetailsSeats);
         tvDetailsSleep = (TextView) v.findViewById(R.id.tvDetailsSleep);
         rbDetailsRating = (RatingBar) v.findViewById(R.id.rbDetailsRating);
+        sliderView = (SliderView) v.findViewById(R.id.detailsSlider);
     }
 
     private void chargeData() {
@@ -177,7 +187,7 @@ public class DetailsFragment extends Fragment {
         tvDetailsType.setText(getString(R.string.vehicle_type) + ": " + vehicle.getType());
         tvDetailsFuel.setText(getString(R.string.fuel) + ": " + vehicle.getFuel());
         tvDetailsPlate.setText(getString(R.string.plate) + ": " + vehicle.getPlate());
-        tvDetailsOwner.setText(getString(R.string.owner) + ": " + vehicle.getOwner());
+        //tvDetailsOwner.setText(getString(R.string.owner) + ": " + vehicle.getOwner());
         tvDetailsMore.setText(getString(R.string.details) + ": " + vehicle.getDescription());
         tvDetailsSeats.setText(getString(R.string.seats) + ": " + vehicle.getPassengers());
         tvDetailsSleep.setText(getString(R.string.beds) + ": " + vehicle.getBeds());

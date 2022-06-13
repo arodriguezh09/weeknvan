@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import arh.miapp.camperbooking.R;
@@ -93,7 +96,21 @@ public class ListAdapterBooking extends RecyclerView.Adapter<ListAdapterBooking.
             grandTotal.setText(String.valueOf(df.format(booking.getGrandTotal()))+"€");
             city.setText(vehicle.getCity());
             //TODO convertirFecha
-            bookingDate.setText(booking.getCheckin() + " -> "+booking.getCheckout());
+
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+            String dateInString = booking.getCheckin();
+            String dateOutString = booking.getCheckout();
+            try {
+                Date dateIn = formatter1.parse(dateInString);
+                Date dateOut = formatter1.parse(dateOutString);
+                SimpleDateFormat formatter2 = new SimpleDateFormat("dd/MM/yyyy");
+                String finalIn = formatter2.format(dateIn);
+                String finalOut = formatter2.format(dateOut);
+                bookingDate.setText(finalIn + " -> "+finalOut);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

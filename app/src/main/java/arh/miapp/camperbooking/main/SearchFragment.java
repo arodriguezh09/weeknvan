@@ -2,6 +2,7 @@ package arh.miapp.camperbooking.main;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import androidx.core.util.Pair;
@@ -15,10 +16,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +35,8 @@ import java.util.List;
 import arh.miapp.camperbooking.R;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemBottom;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemTop;
+import arh.miapp.camperbooking.objects.Booking;
+import arh.miapp.camperbooking.objects.Vehicle;
 
 public class SearchFragment extends Fragment {
 
@@ -39,6 +48,7 @@ public class SearchFragment extends Fragment {
     Button bSearch;
     String city;
     Date checkin, checkout;
+    DatabaseReference dbRef;
 
     ListAdapterItemTop laTop;
     RecyclerView itemsTop;
@@ -47,21 +57,20 @@ public class SearchFragment extends Fragment {
     RecyclerView itemsBottom;
 
 
-
-
     public SearchFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cities = new ArrayList<>();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
-        fillList();
         findViews(v);
         // Adapter para el spinner
         // TODO extra: si elijo ciudad, cambio de fragment y vuelvo, solo me cargará esa ciudad. Por que? buena pregunta xd
@@ -70,7 +79,25 @@ public class SearchFragment extends Fragment {
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds())).build();
+        //fillList();
+        dbRef = FirebaseDatabase.getInstance().getReference("vehicles");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String city = dataSnapshot.getValue(Vehicle.class).getCity();
+                    if (!cities.contains(city)){
+                        cities.add(city);
+                    }
+                }
+                citiesAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_booking, Toast.LENGTH_SHORT).show();
+            }
+        });
         etRangeDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -108,6 +135,7 @@ public class SearchFragment extends Fragment {
                     // Recuperar all
                     ((BottomNavigationActivity) getActivity()).search(city, checkin, checkout);
                 }
+                etDDMenu.setText("");
             }
         });
         // Morralla
@@ -163,15 +191,24 @@ public class SearchFragment extends Fragment {
 
     // Método que llena el spinner de ciudades
     private void fillList() {
-        // TODO extra: llenar el arrayList con lo que recupere de la BBDD
-        // Si no también está bien, ya que nos muestra posibilidades en las que no existirían campers disponibles y mostramos el mensaje
         cities = new ArrayList<>();
-        cities.add("Mérida");
-        cities.add("Sevilla");
-        cities.add("Cáceres");
-        cities.add("Madrid");
-        cities.add("Málaga");
-        cities.add("Barcelona");
+        dbRef = FirebaseDatabase.getInstance().getReference("vehicles");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String city = dataSnapshot.getValue(Vehicle.class).getCity();
+                    if (!cities.contains(city)){
+                        cities.add(city);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_booking, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

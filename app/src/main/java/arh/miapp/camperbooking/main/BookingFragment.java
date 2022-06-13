@@ -21,6 +21,11 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -39,11 +44,11 @@ public class BookingFragment extends Fragment {
 
     List<Booking> bookingList;
 
+    DatabaseReference database2;
     TextView tvBookingBrand;
     TextView tvBookingModel;
     TextView tvBookingYear;
     TextView tvBookingPlate;
-    TextView tvBookingOwner;
     TextView tvBookingTotal;
     Button bBookingValidate;
     TextInputLayout tilBookingDate;
@@ -63,17 +68,16 @@ public class BookingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_booking, container, false);
-        bookingList = new ArrayList<>(((BottomNavigationActivity) getActivity()).bookingList);
-//        frgDetails = new DetailsFragment(vehicleList.get(rvVehicles.getChildAdapterPosition(view)));
-//        ((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
+        bookingList = new ArrayList<>();
+        // Apuntamos a bookings y obtenemos
+        database2 = FirebaseDatabase.getInstance().getReference("bookings");
+        getBookings();
         viewBinding(v);
         showVehicle();
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        //String user = currentFirebaseUser.getUid();
         //TODO ver si puedo hacer highlighting de las fechas que quiero bloquear
         // https://developer.android.com/reference/com/google/android/material/datepicker/CalendarConstraints.DateValidator
         // No parece nada fácil, aqui sale ejemplo https://stackoverflow.com/questions/68281693/how-to-highlight-dates-in-android-datepicker
-
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds())).build();
@@ -120,7 +124,7 @@ public class BookingFragment extends Fragment {
                     }
                 }
                 if (!reserved) {
-                    String key = ((BottomNavigationActivity) getActivity()).database2.push().getKey();
+                    String key = database2.push().getKey();
                     SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Map<String, Object> bookingMap = new HashMap<>();
                     bookingMap.put("checkin", simpleFormat.format(checkin));
@@ -128,7 +132,7 @@ public class BookingFragment extends Fragment {
                     bookingMap.put("idUser", currentFirebaseUser.getUid());
                     bookingMap.put("plate", vehicle.getPlate());
                     bookingMap.put("grandTotal", grandTotal);
-                    ((BottomNavigationActivity) getActivity()).database2.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    database2.child(key).updateChildren(bookingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(getActivity(), R.string.success_booking, Toast.LENGTH_SHORT).show();
@@ -147,12 +151,28 @@ public class BookingFragment extends Fragment {
         return v;
     }
 
+    private void getBookings() {
+        database2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                bookingList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Booking booking = dataSnapshot.getValue(Booking.class);
+                    bookingList.add(booking);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), R.string.error_loading_booking, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void showVehicle() {
         tvBookingBrand.append(vehicle.getBrand());
         tvBookingModel.append(vehicle.getModel());
         tvBookingYear.append(String.valueOf(vehicle.getYear()));
         tvBookingPlate.append(vehicle.getPlate());
-        tvBookingOwner.append(vehicle.getOwner());
     }
 
     private void viewBinding(View v) {
@@ -160,7 +180,6 @@ public class BookingFragment extends Fragment {
         tvBookingModel = v.findViewById(R.id.tvBookingModel);
         tvBookingYear = v.findViewById(R.id.tvBookingYear);
         tvBookingPlate = v.findViewById(R.id.tvBookingPlate);
-        tvBookingOwner = v.findViewById(R.id.tvBookingOwner);
         tvBookingTotal = v.findViewById(R.id.tvBookingTotal);
         bBookingValidate = v.findViewById(R.id.bBookingValidate);
         tilBookingDate = v.findViewById(R.id.tilBookingDate);

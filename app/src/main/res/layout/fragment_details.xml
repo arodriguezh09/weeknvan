@@ -37,6 +37,11 @@
                     android:src="@drawable/manolo"
                     android:visibility="invisible" />
 
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/detailsSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
             </RelativeLayout>
 
             <TextView
@@ -122,7 +127,7 @@
                 android:layout_margin="10dp"
                 android:textSize="15dp"
                 android:text="Matrícula: " />
-
+<!--
             <TextView
                 android:id="@+id/tvDetailsOwner"
                 android:layout_width="wrap_content"
@@ -130,7 +135,7 @@
                 android:layout_margin="10dp"
                 android:textSize="15dp"
                 android:text="Dueño: " />
-
+-->
             <TextView
                 android:id="@+id/tvDetailsMore"
                 android:layout_width="wrap_content"

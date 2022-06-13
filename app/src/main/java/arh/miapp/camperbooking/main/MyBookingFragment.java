@@ -2,10 +2,12 @@ package arh.miapp.camperbooking.main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaRouter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,8 +95,8 @@ public class MyBookingFragment extends Fragment {
             public void onClick(View view) {
                 String plate = bookingListOut.get(rvVehiclesOut.getChildAdapterPosition(view)).getPlate();
                 Vehicle vehicle = new Vehicle();
-                for (Vehicle v : vehicleList){
-                    if (v.getPlate().equals(plate)){
+                for (Vehicle v : vehicleList) {
+                    if (v.getPlate().equals(plate)) {
                         vehicle = v;
                     }
                 }
@@ -111,8 +113,8 @@ public class MyBookingFragment extends Fragment {
             public void onClick(View view) {
                 String plate = bookingListIn.get(rvVehiclesIn.getChildAdapterPosition(view)).getPlate();
                 Vehicle vehicle = new Vehicle();
-                for (Vehicle v : vehicleList){
-                    if (v.getPlate().equals(plate)){
+                for (Vehicle v : vehicleList) {
+                    if (v.getPlate().equals(plate)) {
                         vehicle = v;
                     }
                 }
@@ -121,6 +123,70 @@ public class MyBookingFragment extends Fragment {
             }
         });
         rvVehiclesIn.setAdapter(laBookingIn);
+
+        ItemTouchHelper.SimpleCallback simpleCallbackIn = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Booking b = bookingListIn.get(viewHolder.getAdapterPosition());
+                dbBooking.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Booking booking = dataSnapshot.getValue(Booking.class);
+                            if (booking.getPlate().equals(b.getPlate()) && booking.getCheckin().equals(b.getCheckin())) {
+                                bookingListIn.clear();
+                                dbBooking.child(dataSnapshot.getKey()).removeValue();
+                                laBookingIn.notifyDataSetChanged();
+                            }
+
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        };
+        ItemTouchHelper itemTouchHelperIn = new ItemTouchHelper(simpleCallbackIn);
+        itemTouchHelperIn.attachToRecyclerView(rvVehiclesIn);
+
+        ItemTouchHelper.SimpleCallback simpleCallbackOut = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Booking b = bookingListOut.get(viewHolder.getAdapterPosition());
+                dbBooking.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Booking booking = dataSnapshot.getValue(Booking.class);
+                            if (booking.getPlate().equals(b.getPlate()) && booking.getCheckin().equals(b.getCheckin())) {
+                                bookingListOut.clear();
+                                dbBooking.child(dataSnapshot.getKey()).removeValue();
+                                laBookingOut.notifyDataSetChanged();
+                            }
+
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        };
+        ItemTouchHelper itemTouchHelperOut = new ItemTouchHelper(simpleCallbackOut);
+        itemTouchHelperOut.attachToRecyclerView(rvVehiclesOut);
 
         return v;
     }
@@ -218,9 +284,9 @@ public class MyBookingFragment extends Fragment {
         });
     }
 
-    public void getPhotos(){
-        for(Vehicle ve : vehicleList){
-            dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/"+ve.getPlate());
+    public void getPhotos() {
+        for (Vehicle ve : vehicleList) {
+            dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/" + ve.getPlate());
             dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -235,7 +301,8 @@ public class MyBookingFragment extends Fragment {
                                     Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
                                     ve.setBitmap(bitmap);
                                     laBookingOut.notifyDataSetChanged();
-                                    laBookingIn.notifyDataSetChanged();                                }
+                                    laBookingIn.notifyDataSetChanged();
+                                }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {

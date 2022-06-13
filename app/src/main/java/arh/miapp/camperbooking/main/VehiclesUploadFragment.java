@@ -14,10 +14,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
@@ -36,7 +34,6 @@ import java.util.Map;
 import java.util.Random;
 
 import arh.miapp.camperbooking.R;
-import arh.miapp.camperbooking.objects.Vehicle;
 
 public class VehiclesUploadFragment extends Fragment {
 
@@ -92,15 +89,39 @@ public class VehiclesUploadFragment extends Fragment {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pd.show();
-                String plateStr = plate.getEditText().getText().toString().trim();
-                uploadVehicle();
-                uploadPhoto(plateStr);
-                pd.dismiss();
+                if (isCompleted()) {
+                    pd.show();
+                    String plateStr = plate.getEditText().getText().toString().trim();
+                    uploadVehicle();
+                    uploadPhoto(plateStr);
+                    pd.dismiss();
+                } else {
+                    Toast.makeText(getActivity(), "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         return v;
+    }
+
+    private boolean isCompleted() {
+        boolean completed;
+        if (    beds.getEditText().getText().toString().trim().equals("") ||
+                brand.getEditText().getText().toString().trim().equals("") ||
+                city.getEditText().getText().toString().trim().equals("") ||
+                description.getEditText().getText().toString().trim().equals("") ||
+                fuel.getEditText().getText().toString().trim().equals("") ||
+                model.getEditText().getText().toString().trim().equals("") ||
+                passengers.getEditText().getText().toString().trim().equals("") ||
+                plate.getEditText().getText().toString().trim().equals("") ||
+                pricePerDay.getEditText().getText().toString().trim().equals("") ||
+                type.getEditText().getText().toString().trim().equals("") ||
+                year.getEditText().getText().toString().trim().equals("")) {
+            completed = false;
+        } else {
+            completed = true;
+        }
+        return completed;
     }
 
     private void uploadVehicle() {
@@ -185,7 +206,7 @@ public class VehiclesUploadFragment extends Fragment {
 
     public void uploadPhoto(String plate) {
         // Me crea una carpeta para la matricula
-        StorageReference imageFolder = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference().child("vehicles/"+plate);
+        StorageReference imageFolder = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference().child("vehicles/" + plate);
         for (Uri image : images) {
             // Creamos el nombre del archivo, 1234BBB-img01.jpg
             int thisCounter = ++counter;
@@ -210,7 +231,7 @@ public class VehiclesUploadFragment extends Fragment {
     private void storeLink(String miPath, String plate, int counter) {
         // Guardo el link en mi array, para ello apunto a el
         DatabaseReference dbr = FirebaseDatabase.getInstance().getReference("vehicles/" + plate + "/").child("photos");
-        hashMapUri.put(plate +"-img"+ String.format("%02d", counter), miPath);
+        hashMapUri.put(plate + "-img" + String.format("%02d", counter), miPath);
         dbr.setValue(hashMapUri);
     }
 }
