@@ -3,6 +3,7 @@ package arh.miapp.camperbooking.objects;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Vehicle implements Serializable {
 
@@ -22,6 +23,18 @@ public class Vehicle implements Serializable {
     private double pricePerDay;
     private double rating;
 
+    private Bitmap bitmap;
+    private ArrayList<Bitmap> photos;
+
+    public ArrayList<Bitmap> getBitmaps() {
+        return photos;
+    }
+
+    public void setBitmaps(ArrayList<Bitmap> photos) {
+        this.photos = photos;
+    }
+
+
     public Bitmap getBitmap() {
         return bitmap;
     }
@@ -30,7 +43,6 @@ public class Vehicle implements Serializable {
         this.bitmap = bitmap;
     }
 
-    private Bitmap bitmap;
 
     public Vehicle() {
 

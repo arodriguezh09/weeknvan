@@ -2,6 +2,7 @@ package arh.miapp.camperbooking.main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -169,6 +170,42 @@ public class VehiclesFragment extends Fragment {
 
     private void getPhotos() {
         for(Vehicle ve : vehicleList){
+            dbVehicles = FirebaseDatabase.getInstance().getReference("vehicles/"+ve.getPlate());
+            dbVehicles.child("photos").limitToFirst(1).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String path = dataSnapshot.getValue(String.class);
+                        storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference(path);
+                        try {
+                            File localfile = File.createTempFile("tmp" + ve.getPlate() + "thumbnail", ".jpg");
+                            storageRef.getFile(localfile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(localfile.getAbsolutePath());
+                                    ve.setBitmap(bitmap);
+                                    la.notifyDataSetChanged();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getActivity(), R.string.error_loading_images, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+            /*
             storageRef = FirebaseStorage.getInstance("gs://weeknvan.appspot.com").getReference("vehicles/" + ve.getPhoto() + ".jpg");
             try {
                 File localfile = File.createTempFile("tmp" + ve.getPlate(), ".jpg");
@@ -189,6 +226,7 @@ public class VehiclesFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+             */
         }
     }
 }

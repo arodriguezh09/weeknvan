@@ -194,10 +194,11 @@ public class VehiclesUploadFragment extends Fragment {
             imageFolder.child(imageName.getName()).putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    String imageNameStr = imageName.getPath();
                     imageFolder.child(imageName.getName()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            String miPath = String.valueOf(uri);
+                            String miPath = imageNameStr;
                             storeLink(miPath, plate, thisCounter);
                         }
                     });
