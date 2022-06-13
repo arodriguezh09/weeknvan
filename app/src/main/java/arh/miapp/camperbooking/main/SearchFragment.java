@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,7 @@ import arh.miapp.camperbooking.R;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemBottom;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemTop;
 import arh.miapp.camperbooking.objects.Booking;
+import arh.miapp.camperbooking.objects.ItemBanner;
 import arh.miapp.camperbooking.objects.Vehicle;
 
 public class SearchFragment extends Fragment {
@@ -49,6 +51,9 @@ public class SearchFragment extends Fragment {
     String city;
     Date checkin, checkout;
     DatabaseReference dbRef;
+    List<ItemBanner> itemsTopArray;
+    List<ItemBanner> itemsBotArray;
+    Fragment vehiclesFragment;
 
     ListAdapterItemTop laTop;
     RecyclerView itemsTop;
@@ -72,6 +77,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
         findViews(v);
+        vehiclesFragment = new VehiclesFragment();
         // Adapter para el spinner
         // TODO extra: si elijo ciudad, cambio de fragment y vuelvo, solo me cargará esa ciudad. Por que? buena pregunta xd
         ArrayAdapter<String> citiesAdapter = new ArrayAdapter<>(getActivity(), R.layout.option_item, cities);
@@ -79,14 +85,13 @@ public class SearchFragment extends Fragment {
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
                 .setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds())).build();
-        //fillList();
         dbRef = FirebaseDatabase.getInstance().getReference("vehicles");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String city = dataSnapshot.getValue(Vehicle.class).getCity();
-                    if (!cities.contains(city)){
+                    if (!cities.contains(city)) {
                         cities.add(city);
                     }
                 }
@@ -140,41 +145,49 @@ public class SearchFragment extends Fragment {
         });
         // Morralla
 
-        List<String> lista = new ArrayList<>();
-        lista.add("Hola");
-        lista.add("Hola");
-        lista.add("Hola");
-        lista.add("Hola");
-        lista.add("Hola");
-        lista.add("probando");
+        itemsTopArray = new ArrayList<>();
+        itemsBotArray = new ArrayList<>();
+        fillList();
 
-        List<String> lista2 = new ArrayList<>();
-        lista2.add("Hola");
-        lista2.add("Hola");
-        lista2.add("Hola");
-        lista2.add("Hola");
-
-        LinearLayoutManager layoutManager
+        LinearLayoutManager layoutManagerTop
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManager2
+        LinearLayoutManager layoutManagerBot
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        laTop = new ListAdapterItemTop(lista2, getContext());
+        laTop = new ListAdapterItemTop(itemsTopArray, getContext());
         itemsTop = (RecyclerView) v.findViewById(R.id.itemRvTop);
-        itemsTop.setLayoutManager(layoutManager);
-        itemsTop.setAdapter(laTop);
-
-
-        laBottom = new ListAdapterItemBottom(lista, getContext());
-        itemsBottom = (RecyclerView) v.findViewById(R.id.itemRvBottom);
-        itemsBottom.setLayoutManager(layoutManager2);
-        /*laBottom.setOnClickListener(new View.OnClickListener() {
+        itemsTop.setLayoutManager(layoutManagerTop);
+        laTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //frgDetails = new DetailsFragment(vehicleList.get(itemsBottom.getChildAdapterPosition(view)));
-                //((BottomNavigationActivity) getActivity()).loadFragment(frgDetails, true);
+                ItemBanner ib = itemsTopArray.get(itemsTop.getChildAdapterPosition(view));
+                vehiclesFragment = new VehiclesFragment(ib.getCity(), new Date(), new Date());
+                ((BottomNavigationActivity) getActivity()).loadFragment(vehiclesFragment, true);
             }
-        });*/
+        });
+        itemsTop.setAdapter(laTop);
+
+        laBottom = new ListAdapterItemBottom(itemsBotArray, getContext());
+        itemsBottom = (RecyclerView) v.findViewById(R.id.itemRvBottom);
+        itemsBottom.setLayoutManager(layoutManagerBot);
+        laBottom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemBanner ib = itemsBotArray.get(itemsBottom.getChildAdapterPosition(view));
+
+                SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                String dateInString = ib.getCheckin();
+                String dateOutString = ib.getCheckout();
+                try {
+                    Date dateIn = formatter1.parse(dateInString);
+                    Date dateOut = formatter1.parse(dateOutString);
+                    vehiclesFragment = new VehiclesFragment(ib.getCity(), dateIn, dateOut);
+                    ((BottomNavigationActivity) getActivity()).loadFragment(vehiclesFragment, true);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         itemsBottom.setAdapter(laBottom);
 
         return v;
@@ -189,26 +202,17 @@ public class SearchFragment extends Fragment {
         bSearch = v.findViewById(R.id.bSearch);
     }
 
-    // Método que llena el spinner de ciudades
     private void fillList() {
-        cities = new ArrayList<>();
-        dbRef = FirebaseDatabase.getInstance().getReference("vehicles");
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String city = dataSnapshot.getValue(Vehicle.class).getCity();
-                    if (!cities.contains(city)){
-                        cities.add(city);
-                    }
-                }
-            }
+        itemsTopArray.add(new ItemBanner(R.drawable.sevilla, "Conoce Sevilla", "Sevilla"));
+        itemsTopArray.add(new ItemBanner(R.drawable.caceres, "Ven a Cáceres", "Cáceres"));
+        itemsTopArray.add(new ItemBanner(R.drawable.barcelona, "Barcelona y alrededores", "Barcelona"));
+        itemsTopArray.add(new ItemBanner(R.drawable.malaga, "Playas de Málaga", "Málaga"));
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getActivity(), R.string.error_loading_booking, Toast.LENGTH_SHORT).show();
-            }
-        });
+        itemsBotArray.add(new ItemBanner(R.drawable.malaga, "Málaga en verano", "Málaga", "21/06/2022", "23/09/2022"));
+        itemsBotArray.add(new ItemBanner(R.drawable.verano, "Vacaciones de verano", "01/06/2022", "31/08/2022"));
+        itemsBotArray.add(new ItemBanner(R.drawable.caceres, "Primavera en Cáceres", "Cáceres", "20/03/2022", "21/06/2022"));
+        itemsBotArray.add(new ItemBanner(R.drawable.barcelona, "Pirineos desde Barcelona", "Barcelona", "21/12/2022", "20/03/2023"));
+        itemsBotArray.add(new ItemBanner(R.drawable.malaga, "Navidad en Málaga", "Málaga", "21/12/2022", "07/01/2023"));
     }
 
 }

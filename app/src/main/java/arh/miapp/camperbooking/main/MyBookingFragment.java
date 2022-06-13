@@ -2,7 +2,6 @@ package arh.miapp.camperbooking.main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaRouter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

@@ -13,15 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import arh.miapp.camperbooking.R;
+import arh.miapp.camperbooking.objects.ItemBanner;
 
 public class ListAdapterItemBottom extends RecyclerView.Adapter<ListAdapterItemBottom.ViewHolder> implements View.OnClickListener{
 
-    private List<String> titles;
+    private List<ItemBanner> items;
     private LayoutInflater inflater;
     private View.OnClickListener listener;
 
-    public ListAdapterItemBottom(List<String> titles, Context context) {
-        this.titles = titles;
+    public ListAdapterItemBottom(List<ItemBanner> items, Context context) {
+        this.items = items;
         inflater = LayoutInflater.from(context);
     }
 
@@ -35,12 +36,12 @@ public class ListAdapterItemBottom extends RecyclerView.Adapter<ListAdapterItemB
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapterItemBottom.ViewHolder holder, int position) {
-        holder.bindData(titles.get(position));
+        holder.bindData(items.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return items.size();
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -65,12 +66,9 @@ public class ListAdapterItemBottom extends RecyclerView.Adapter<ListAdapterItemB
             photo = itemView.findViewById(R.id.elementImage);
             brand = itemView.findViewById(R.id.elementTitle);
         }
-        public void bindData(final String titles){
-            /*photo.setImageBitmap(vehicle.getBitmap());
-            brand.setText(vehicle.getBrand());*/
-
-            photo.setImageResource(R.drawable.caceres);
-            brand.setText("Hola Cáceres");
+        public void bindData(final ItemBanner item){
+            photo.setImageResource(item.getImage());
+            brand.setText(item.getText());
         }
     }
 }
