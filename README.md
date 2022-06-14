@@ -11,20 +11,23 @@
 ## Plataformas
   La aplicación está disponible para Android.
 
-[📱 Descargar Weeknvan para Android 📱](https://www.google.com/ "Descargar Weeknvan para Android")
+[📱 Descargar Weeknvan para Android 📱](https://github.com/arodriguezh09/weeknvan/raw/master/Weeknvan.apk "Descargar Weeknvan para Android")
 
 ###### Se plantea una futura versión iOS, así como una versión Web.
 
 
 ## Tecnologías usadas
+Se ha utilizado Java como lenguaje de programación.
 <a href="https://www.java.com/">
     <img src="https://1000marcas.net/wp-content/uploads/2020/11/Java-logo.png" width="200">
 </a>
 <br>
+También se ha utilizado Firebase como BaaS, facilitando así las tareas de manejo de credenciales, bases de datos en la nube y almacenamiento de archivos.
 <a href="https://firebase.google.com/">
     <img src="https://firebase.google.com/images/brand-guidelines/logo-built_black.png" width="200">
 </a>
 <br>
+## Pantallas de la aplicación
 ⌛ En desarrollo...
 
 ## Manual
