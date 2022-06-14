@@ -81,7 +81,7 @@ public class SignUpFragment extends Fragment {
                 String lastName = tilRegLastName.getEditText().getText().toString().trim();
                 String phone = tilRegPhone.getEditText().getText().toString().trim();
                 String nif = tilRegNif.getEditText().getText().toString().trim();
-                // Reviso que los campos no estén vacios TODO cambiar por algo mas elegante
+                // Reviso que los campos no estén vacios
                 if (mail.isEmpty() || pass.isEmpty() || pass2.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty() || nif.isEmpty()) {
                     if (mail.isEmpty()) {
                         tilRegMail.setError(getString(R.string.required));
@@ -140,7 +140,6 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // TODO push del usuario a realtime database
                             database3 = FirebaseDatabase.getInstance().getReference("users");
                             FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                             String user = currentFirebaseUser.getUid();

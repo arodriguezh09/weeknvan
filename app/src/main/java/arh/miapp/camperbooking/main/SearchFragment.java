@@ -36,7 +36,6 @@ import java.util.List;
 import arh.miapp.camperbooking.R;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemBottom;
 import arh.miapp.camperbooking.listadapters.ListAdapterItemTop;
-import arh.miapp.camperbooking.objects.Booking;
 import arh.miapp.camperbooking.objects.ItemBanner;
 import arh.miapp.camperbooking.objects.Vehicle;
 
@@ -48,12 +47,14 @@ public class SearchFragment extends Fragment {
     AutoCompleteTextView etDDMenu;
     EditText etRangeDate;
     Button bSearch;
+    Button rentYourCamper;
     String city;
     Date checkin, checkout;
     DatabaseReference dbRef;
     List<ItemBanner> itemsTopArray;
     List<ItemBanner> itemsBotArray;
     Fragment vehiclesFragment;
+    Fragment vehiclesUploadFragment;
 
     ListAdapterItemTop laTop;
     RecyclerView itemsTop;
@@ -79,7 +80,6 @@ public class SearchFragment extends Fragment {
         findViews(v);
         vehiclesFragment = new VehiclesFragment();
         // Adapter para el spinner
-        // TODO extra: si elijo ciudad, cambio de fragment y vuelvo, solo me cargará esa ciudad. Por que? buena pregunta xd
         ArrayAdapter<String> citiesAdapter = new ArrayAdapter<>(getActivity(), R.layout.option_item, cities);
         etDDMenu.setAdapter(citiesAdapter);
         MaterialDatePicker dp = MaterialDatePicker.Builder.dateRangePicker()
@@ -107,7 +107,6 @@ public class SearchFragment extends Fragment {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    // TODO extra: intentar abrir el fragment de otra manera para que no ocupe toda la pantalla
                     // creo que seteando el texto hardcode y bloqueando la entrada de texto manual lo solucionamos
                     dp.show(getActivity().getSupportFragmentManager(), "Material_Range");
                     dp.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
@@ -143,7 +142,13 @@ public class SearchFragment extends Fragment {
                 etDDMenu.setText("");
             }
         });
-        // Morralla
+
+        rentYourCamper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BottomNavigationActivity) getActivity()).loadFragment(new VehiclesUploadFragment(), true);
+            }
+        });
 
         itemsTopArray = new ArrayList<>();
         itemsBotArray = new ArrayList<>();
@@ -200,7 +205,9 @@ public class SearchFragment extends Fragment {
         tilRangeDate = v.findViewById(R.id.tilRangeDate);
         etRangeDate = v.findViewById(R.id.etRangeDate);
         bSearch = v.findViewById(R.id.bSearch);
+        rentYourCamper = v.findViewById(R.id.rentYourCamper);
     }
+
 
     private void fillList() {
         itemsTopArray.add(new ItemBanner(R.drawable.sevilla, "Conoce Sevilla", "Sevilla"));

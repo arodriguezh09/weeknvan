@@ -23,22 +23,25 @@
         <LinearLayout
             android:id="@+id/SearchHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¡Hola!"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:fontFamily="@font/varelaround_regular"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="¿Dónde comenzará tu aventura?" />
+                android:text="¿Dónde comenzará tu aventura?"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDDMenu"
@@ -47,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
                 android:hint="Ciudad"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
                 app:startIconDrawable="@drawable/ic_baseline_location_on_24">
 
                 <AutoCompleteTextView
@@ -65,8 +68,8 @@
                 android:layout_height="80dp"
                 android:gravity=""
                 android:hint="Fecha del viaje"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
                 app:boxCornerRadiusTopEnd="0dp"
                 app:boxCornerRadiusTopStart="0dp"
                 app:boxStrokeWidth="0dp"
@@ -84,15 +87,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:radius="15dp"
-                android:text="Buscar" />
+                android:text="Buscar"
+                app:cornerRadius="100dp"
+                android:fontFamily="@font/varelaround_regular"/>
 
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Configura tu viaje"
+            android:text="¿Desde dónde saldrás?"
             android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/varelaround_regular"
             android:layout_marginBottom="5dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -109,11 +117,17 @@
             android:layout_height="70dp"
             android:radius="15dp"
             android:layout_marginHorizontal="10dp"
-            android:text="¡Alquila tu camper!" />
+            android:text="¡Alquila tu camper!"
+            app:cornerRadius="100dp"
+            android:fontFamily="@font/varelaround_regular"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Elige tu tipo de vehiculo"
+            android:text="Elige por temporada"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/varelaround_regular"
             android:textSize="20dp"
             android:layout_marginBottom="5dp"/>
 

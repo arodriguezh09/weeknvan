@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:indeterminate="true"
-                    app:indicatorColor="@color/amarillo" />
+                    app:indicatorColor="@color/adobe_violet_light" />
 
                 <ImageView
                     android:id="@+id/ivDetails"
@@ -154,7 +154,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_weight="0"
-        android:background="@color/amarillo"
+        android:background="@color/adobe_violet_light"
         android:gravity="center_vertical">
 
         <TextView
@@ -162,7 +162,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Precio €/día"
+            android:fontFamily="@font/varelaround_regular"
             android:textSize="25dp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/bDetailsBook"
             app:layout_constraintHorizontal_bias="0.5"
@@ -174,10 +176,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reservar"
+            android:fontFamily="@font/varelaround_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvDetailsPrice"
+            android:backgroundTint="@color/adobe_lavender"
+            android:textColor="@color/adobe_violet_dark"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

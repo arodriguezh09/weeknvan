@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.328" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/drawable/ic_baseline_airline_seat_recline_normal_24.xml" value="0.357" />
+        <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/drawable/ic_baseline_bed_24.xml" value="0.357" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout-land/fragment_login.xml" value="0.425" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_bottom_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/elale/Desktop/CamperBooking/app/src/main/res/layout/activity_login.xml" value="0.18802083333333333" />

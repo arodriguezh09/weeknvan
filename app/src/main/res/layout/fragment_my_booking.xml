@@ -15,15 +15,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/amarillo"
+            android:background="@color/white"
             android:orientation="vertical">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/adobe_violet_dark"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:textColor="@color/adobe_violet_dark"
                 android:text="Mis reservas como cliente"
+                android:fontFamily="@font/varelaround_regular"
                 android:textSize="20dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/adobe_violet_dark"/>
         </LinearLayout>
 
         <LinearLayout
@@ -62,15 +71,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/amarillo"
+                android:background="@color/white"
                 android:orientation="vertical">
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/adobe_violet_dark"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="Reservas sobre mis vehículos"
+                    android:fontFamily="@font/varelaround_regular"
+                    android:textColor="@color/adobe_violet_dark"
                     android:textSize="20dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/adobe_violet_dark"/>
             </LinearLayout>
 
             <FrameLayout

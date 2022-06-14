@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
-            // TODO extra: Adecentar la excepción
+            e.printStackTrace();
         }
     }
 

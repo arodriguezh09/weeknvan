@@ -73,7 +73,6 @@ public class MyBookingFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_booking, container, false);
         // View binding del mensaje vacio
         tvMessage404 = v.findViewById(R.id.tvMessage404book);
-
         // Recuperamos el id del usuario para buscar sus reservas y sus vehiculos
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -173,6 +172,7 @@ public class MyBookingFragment extends Fragment {
                                 bookingListOut.clear();
                                 dbBooking.child(dataSnapshot.getKey()).removeValue();
                                 laBookingOut.notifyDataSetChanged();
+
                             }
 
                         }
@@ -199,6 +199,11 @@ public class MyBookingFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Booking b = dataSnapshot.getValue(Booking.class);
                     bookingListOut.add(b);
+                }
+                if (bookingListOut.isEmpty()){
+                    tvMessage404.setVisibility(View.VISIBLE);
+                } else {
+                    tvMessage404.setVisibility(View.INVISIBLE);
                 }
                 laBookingOut.notifyDataSetChanged();
             }
@@ -266,13 +271,6 @@ public class MyBookingFragment extends Fragment {
                 laBookingOut.notifyDataSetChanged();
                 laBookingIn.notifyDataSetChanged();
                 getPhotos();
-                checkList();
-            }
-
-            private void checkList() {
-                if (!vehicleList.isEmpty()) {
-                    tvMessage404.setVisibility(View.INVISIBLE);
-                }
             }
 
             @Override

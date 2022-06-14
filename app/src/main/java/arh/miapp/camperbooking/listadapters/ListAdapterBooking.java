@@ -95,8 +95,6 @@ public class ListAdapterBooking extends RecyclerView.Adapter<ListAdapterBooking.
             model.setText(vehicle.getModel());
             grandTotal.setText(String.valueOf(df.format(booking.getGrandTotal()))+"€");
             city.setText(vehicle.getCity());
-            //TODO convertirFecha
-
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
             String dateInString = booking.getCheckin();
             String dateOutString = booking.getCheckout();

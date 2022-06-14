@@ -362,7 +362,6 @@ public class UserFragment extends Fragment {
         Intent it = new Intent(getActivity(), MainActivity.class);
         it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(it);
-        // TODO extra: si queremos hacer una transicion lo hacemos asi. pillara la info desde el tema que tenga predefinido, mirar xml
         //startActivity(it, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 }

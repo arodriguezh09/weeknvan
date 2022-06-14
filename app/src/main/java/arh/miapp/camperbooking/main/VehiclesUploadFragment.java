@@ -210,7 +210,6 @@ public class VehiclesUploadFragment extends Fragment {
         for (Uri image : images) {
             // Creamos el nombre del archivo, 1234BBB-img01.jpg
             int thisCounter = ++counter;
-            //TODO a ver si acierto xd
             StorageReference imageName = imageFolder.child(plate + "-img" + String.format("%02d", thisCounter));
             imageFolder.child(imageName.getName()).putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
