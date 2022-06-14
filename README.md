@@ -18,11 +18,13 @@
 
 ## Tecnologías usadas
 Se ha utilizado Java como lenguaje de programación.
+<br>
 <a href="https://www.java.com/">
     <img src="https://1000marcas.net/wp-content/uploads/2020/11/Java-logo.png" width="200">
 </a>
 <br>
 También se ha utilizado Firebase como BaaS, facilitando así las tareas de manejo de credenciales, bases de datos en la nube y almacenamiento de archivos.
+<br>
 <a href="https://firebase.google.com/">
     <img src="https://firebase.google.com/images/brand-guidelines/logo-built_black.png" width="200">
 </a>
