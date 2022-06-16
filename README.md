@@ -30,10 +30,23 @@ También se ha utilizado Firebase como BaaS, facilitando así las tareas de mane
 </a>
 <br>
 ## Pantallas de la aplicación
-⌛ En desarrollo...
+### Pantalla de login y registro
+<img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/1.jpg" width="150">  <img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/2.jpg" width="150">
+### Pantalla principal y búsqueda
+<img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/3.jpg" width="150">  <img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/4.jpg" width="150">
+<br><br>
+### Detalles del vehículo y reserva
+<img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/5.jpg" width="150">  <img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/6.jpg" width="150">
+<br><br>
+### Gestión de reservas
+<img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/7.jpg" width="150"> 
+<br><br>
 
-## Manual
-⌛ En desarrollo...
+### Ajustes de usuario y gestión de vehículos
+<img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/8.jpg" width="150">  <img src="https://github.com/arodriguezh09/weeknvan/blob/main/pantallas/9.jpg" width="150">
+<br><br>
 
-## Disclaimer
-Este 'README.md' está en una fase inicial de desarrollo y sufrirá cambios en las próximas semanas.
+## Manuales
+[📚👤 Manual del usuario Android](https://github.com/arodriguezh09/weeknvan/blob/main/manuales/ManualTecnico_Weeknvan.pdf "Descargar manual")
+<br>
+[📚👨🏻‍💻 Manual del desarrollador Android](https://github.com/arodriguezh09/weeknvan/blob/main/manuales/ManualUsuario_Weeknvan.pdf "Descargar manual")
